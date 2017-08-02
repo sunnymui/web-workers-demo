@@ -3,15 +3,20 @@ importScripts('imageManips.js');
 this.onmessage = function(e) {
   var imageData = e.data.imageData;
   var type = e.data.type;
+  var base_val_index;
+  var manipulate;
 
   try {
+    // set the manipulation function based on the type
+    manipulate = set_manipulate(type);
     length = imageData.data.length / 4;
     for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
       r = imageData.data[i * 4 + 0];
       g = imageData.data[i * 4 + 1];
       b = imageData.data[i * 4 + 2];
       a = imageData.data[i * 4 + 3];
-      pixel = manipulate(type, r, g, b, a);
+      // run the now set correct manipulation function
+      pixel = manipulate(r, g, b, a);
       imageData.data[i * 4 + 0] = pixel[0];
       imageData.data[i * 4 + 1] = pixel[1];
       imageData.data[i * 4 + 2] = pixel[2];
@@ -26,4 +31,5 @@ this.onmessage = function(e) {
     throw new ManipulationException('Image manipulation error');
     postMessage(undefined);
   }
+  // self.close();
 }
